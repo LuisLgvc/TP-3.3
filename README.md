@@ -23,7 +23,7 @@ Se recomienda usar ThunderClient(extension de Visual Studio Code) y colocar el j
 http://127.0.0.1:5000/films/20
 
 # Ejercicio 2 'POST'
-http://127.0.0.1:5000/films/films
+http://127.0.0.1:5000/films
 
 # Ejercicio 3 'PUT'
 http://127.0.0.1:5000/films/100

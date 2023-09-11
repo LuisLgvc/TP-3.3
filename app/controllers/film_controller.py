@@ -52,7 +52,8 @@ class FilmController:
         film = Film(**data)
 
         # TODO: Validate film exists
-        Film.update(film)
+        if film.exists(film_id):
+            Film.update(film)
         return {'message': 'Film updated successfully'}, 200
     
     @classmethod

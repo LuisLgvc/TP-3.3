@@ -96,18 +96,16 @@ class Film:
         else:
             raise InvalidDataError("El campo rental_duration es obligatorio")
 
+        # Verifica si special_features es una lista y si dicha lista contiene las palabras reservadas
         if film.special_features is not None:
             reservadas = ["Trailers", "Commentaries", "Deleted Scenes", "Behind the Scenes"]
             verif_palabras = all(film in reservadas for film in film.special_features)
             if not isinstance(film.special_features, list):
                 raise InvalidDataError("special_features debe ser una lista")
-
             if not verif_palabras: 
                 raise InvalidDataError("special_features debe contener las palabras reservadas 'Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes'")
 
-
         return True
-
 
     @classmethod
     def exists(cls, film_id):

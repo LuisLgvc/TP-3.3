@@ -1,5 +1,7 @@
 from ..database import DatabaseConnection
 
+from .exceptions import FilmNotFound, InvalidDataError
+
 class Film:
     """Film model class"""
 
@@ -56,6 +58,18 @@ class Film:
         }
     
     @classmethod
+    def if_exist(cls, film_id):
+        """Verifica si un film existe o no a traves de su ID"""
+        query = """SELECT film_id FROM sakila.film WHERE film_id = %s"""
+        params = film_id,
+        result = DatabaseConnection.fetch_one(query, params=params)
+
+        if result is None:
+            raise FilmNotFound(film_id)
+        return True
+
+
+    @classmethod
     def get(cls, film):
         """Get a film by id
         Args:
@@ -69,11 +83,12 @@ class Film:
         length, replacement_cost, rating, special_features, last_update 
         FROM sakila.film WHERE film_id = %s"""
         params = film.film_id,
-        result = DatabaseConnection.fetch_one(query, params=params)
-
-        if result is not None:
-            return cls(*result)
-        return None
+        if cls.if_exist(film.film_id):
+            result = DatabaseConnection.fetch_one(query, params=params)
+    
+            if result is not None:
+                return cls(*result)
+            return None
     
     @classmethod
     def get_all(cls):

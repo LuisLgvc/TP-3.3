@@ -39,21 +39,17 @@ class FilmController:
         """Update a film"""
         data = request.json
         # TODO: Validate data
-        if data.get('rental_rate') is not None:
-            if isinstance(data.get('rental_rate'), int):
-                data['rental_rate'] = Decimal(data.get('rental_rate'))/100
-        
-        if data.get('replacement_cost') is not None:
-            if isinstance(data.get('replacement_cost'), int):
-                data['replacement_cost'] = Decimal(data.get('replacement_cost'))/100
         
         data['film_id'] = film_id
 
         film = Film(**data)
 
         # TODO: Validate film exists
-        if film.exists(film_id):
-            Film.update(film)
+        # Verifico la existencia del film
+        if Film.exists(film_id): # Ejercicio 3
+            # Verifico que el film cumpla con el formato requerido
+            if Film.validate(film): # Ejercicio 4
+                Film.update(film)
         return {'message': 'Film updated successfully'}, 200
     
     @classmethod
@@ -62,5 +58,7 @@ class FilmController:
         film = Film(film_id=film_id)
 
         # TODO: Validate film exists
-        Film.delete(film)
+        # Verifico la existencia del film
+        if Film.exists(film_id):
+            Film.delete(film)
         return {'message': 'Film deleted successfully'}, 204

@@ -60,7 +60,7 @@ class Film:
         }
 
     @classmethod
-    def validate(cls, film):
+    def validate(cls, film): # Ejercicio 2
         # Verifica si el titulo está siendo ingresado y el tamaño del mismo
         if film.title is not None:
             if len(film.title) < 3:
@@ -107,8 +107,8 @@ class Film:
 
         return True
 
-    @classmethod
-    def exists(cls, film_id):
+    @classmethod 
+    def exists(cls, film_id): # Ejercicio 1 y 3
         """Verifica si un film existe o no a traves de su ID"""
         query = """SELECT film_id FROM sakila.film WHERE film_id = %s"""
         params = film_id,

@@ -28,18 +28,11 @@ class FilmController:
     def create(cls):
         """Create a new film"""
         data = request.json
-        # TODO: Validate data
-        if data.get('rental_rate') is not None:
-            if isinstance(data.get('rental_rate'), int):
-                data['rental_rate'] = Decimal(data.get('rental_rate'))/100
-        
-        if data.get('replacement_cost') is not None:
-            if isinstance(data.get('replacement_cost'), int):
-                data['replacement_cost'] = Decimal(data.get('replacement_cost'))/100
-
+        # TODO: Validate date
         film = Film(**data)
-        Film.create(film)
-        return {'message': 'Film created successfully'}, 201
+        if Film.validate(film):
+            Film.create(film)
+            return {'message': 'Film created successfully'}, 201
 
     @classmethod
     def update(cls, film_id):

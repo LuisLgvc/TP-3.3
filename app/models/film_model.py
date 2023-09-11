@@ -2,6 +2,8 @@ from ..database import DatabaseConnection
 
 from .exceptions import FilmNotFound, InvalidDataError
 
+from decimal import Decimal
+
 class Film:
     """Film model class"""
 
@@ -56,9 +58,59 @@ class Film:
             "special_features": special_features,
             "last_update": str(self.last_update)
         }
-    
+
     @classmethod
-    def if_exist(cls, film_id):
+    def validate(cls, film):
+        # Verifica si el titulo está siendo ingresado y el tamaño del mismo
+        if film.title is not None:
+            if len(film.title) < 3:
+                raise InvalidDataError("El titulo debe tener 3 caracteres como minimo")
+        else:
+            raise InvalidDataError("El campo title es obligatorio")
+
+        # Verifica si rental_rate es un numero entero
+        if film.rental_rate is not None:
+            if isinstance(film.rental_rate, int):
+                film.rental_rate = Decimal(film.rental_rate)/100
+            else:
+                raise InvalidDataError("La campo rental_rate debe ser un numero entero") 
+        
+        # Verifica si replacement_cost es un numero entero
+        if film.replacement_cost is not None:
+            if isinstance(film.replacement_cost, int):
+                film.replacement_cost = Decimal(film.replacement_cost)/100
+            else:
+                raise InvalidDataError("El campo replacement_cost debe ser un numero entero")
+
+        # Verifica si language_id es un numero entero y si está siendo ingresado
+        if film.language_id is not None:
+            if not isinstance(film.language_id, int):
+                raise InvalidDataError("language_id debe ser un numero entero")
+        else:
+            raise InvalidDataError("El campo language_id es obligatorio")
+        
+        # Verifica si language_id es un numero entero y si está siendo ingresado
+        if film.rental_duration is not None:
+            if not isinstance(film.rental_duration, int):
+                raise InvalidDataError("rental_duration debe ser un numero entero")
+        else:
+            raise InvalidDataError("El campo rental_duration es obligatorio")
+
+        if film.special_features is not None:
+            reservadas = ["Trailers", "Commentaries", "Deleted Scenes", "Behind the Scenes"]
+            verif_palabras = all(film in reservadas for film in film.special_features)
+            if not isinstance(film.special_features, list):
+                raise InvalidDataError("special_features debe ser una lista")
+
+            if not verif_palabras: 
+                raise InvalidDataError("special_features debe contener las palabras reservadas 'Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes'")
+
+
+        return True
+
+
+    @classmethod
+    def exists(cls, film_id):
         """Verifica si un film existe o no a traves de su ID"""
         query = """SELECT film_id FROM sakila.film WHERE film_id = %s"""
         params = film_id,
@@ -83,7 +135,7 @@ class Film:
         length, replacement_cost, rating, special_features, last_update 
         FROM sakila.film WHERE film_id = %s"""
         params = film.film_id,
-        if cls.if_exist(film.film_id):
+        if cls.exists(film.film_id):
             result = DatabaseConnection.fetch_one(query, params=params)
     
             if result is not None:

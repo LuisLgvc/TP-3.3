@@ -23,8 +23,8 @@ class CustomException(Exception):
 
 class FilmNotFound(CustomException):
       def __init__(self, film_id):
-        description = f"El film con id {film_id} no existe"
-        super().__init__(status_code=404, name="Film no encontrado", description=description)
+        description = f"Film with id {film_id} not found"
+        super().__init__(status_code=404, name="Film Not Found", description=description)
         
 #Ejercicio 2
 

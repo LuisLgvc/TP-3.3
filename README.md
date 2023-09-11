@@ -9,9 +9,13 @@ El json recomendado para probar el funcionamiento de todos los endpoints es:
   "rating": "PG",
   "release_year": 2006,
   "rental_duration": 6,
-  "rental_rate": 99,
-  "replacement_cost": 2099,
-  "title": "Nuevo Titulo"
+  "rental_rate": 0.99,
+  "replacement_cost": 20.99,
+  "special_features": [
+    "Behind the Scenes",
+    "Deleted Scenes"
+  ],
+  "title": "Nuevo título"
 }
 Se recomienda usar ThunderClient(extension de Visual Studio Code) y colocar el json en la pestaña de body y JSON respectivamente a su vez de colocar los endpoints para cada ejercicio:
 
